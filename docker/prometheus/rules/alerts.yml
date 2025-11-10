@@ -1,0 +1,87 @@
+groups:
+  - name: PostgreSQLAlerts
+    rules:
+      - alert: HighConnectionCount
+        expr: pg_stat_activity_count{datname="procurement_portal"} > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High number of database connections
+          description: Database connection count is over 80% of maximum ({{ $value }})
+
+      - alert: LowCacheHitRatio
+        expr: pg_stat_database_cache_hit_ratio{datname="procurement_portal"} < 0.8
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: Low cache hit ratio
+          description: Database cache hit ratio is below 80% ({{ $value }})
+
+      - alert: HighTransactionRollbackRate
+        expr: rate(pg_stat_database_xact_rollback{datname="procurement_portal"}[5m]) / rate(pg_stat_database_xact_commit{datname="procurement_portal"}[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High transaction rollback rate
+          description: Transaction rollback rate is above 10% ({{ $value }})
+
+  - name: NodeJSAlerts
+    rules:
+      - alert: HighResponseTime
+        expr: rate(http_request_duration_seconds_sum{job="backend"}[5m]) / rate(http_request_duration_seconds_count{job="backend"}[5m]) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High API response time
+          description: Average response time is above 1 second ({{ $value }}s)
+
+      - alert: HighErrorRate
+        expr: rate(http_request_errors_total{job="backend"}[5m]) / rate(http_request_duration_seconds_count{job="backend"}[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: High error rate
+          description: Error rate is above 5% ({{ $value }})
+
+      - alert: HighEventLoopLag
+        expr: nodejs_eventloop_lag_seconds > 0.1
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: High event loop lag
+          description: Event loop lag is above 100ms ({{ $value }}s)
+
+  - name: SystemAlerts
+    rules:
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High CPU usage
+          description: CPU usage is above 85% ({{ $value }}%)
+
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High memory usage
+          description: Memory usage is above 90% ({{ $value }}%)
+
+      - alert: LowDiskSpace
+        expr: (node_filesystem_size_bytes{mountpoint="/"} - node_filesystem_free_bytes{mountpoint="/"}) / node_filesystem_size_bytes{mountpoint="/"} * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Low disk space
+          description: Disk usage is above 85% ({{ $value }}%)

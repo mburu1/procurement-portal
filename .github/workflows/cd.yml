@@ -1,0 +1,101 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js 18.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+        cache: 'npm'
+
+    # Backend deployment
+    - name: Install backend dependencies
+      working-directory: ./backend
+      run: npm ci
+
+    - name: Build backend
+      working-directory: ./backend
+      run: npm run build
+      env:
+        NODE_ENV: production
+
+    # Frontend deployment
+    - name: Install frontend dependencies
+      working-directory: ./frontend
+      run: npm ci
+
+    - name: Build frontend
+      working-directory: ./frontend
+      run: npm run build
+      env:
+        NODE_ENV: production
+        REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+
+    # Deploy to production
+    - name: Deploy to production
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+        CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+        CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+      run: |
+        # Login to Docker Hub
+        echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+        
+        # Build and push Docker images
+        docker build -t $DOCKER_USERNAME/procurement-portal-backend:latest -f docker/backend/Dockerfile ./backend
+        docker build -t $DOCKER_USERNAME/procurement-portal-frontend:latest -f docker/frontend/Dockerfile ./frontend
+        
+        docker push $DOCKER_USERNAME/procurement-portal-backend:latest
+        docker push $DOCKER_USERNAME/procurement-portal-frontend:latest
+        
+        # Deploy using docker-compose
+        docker-compose -f docker-compose.prod.yml pull
+        docker-compose -f docker-compose.prod.yml up -d
+
+    - name: Health check
+      run: |
+        # Wait for services to start
+        sleep 30
+        
+        # Check if services are running
+        curl --fail ${{ secrets.BACKEND_HEALTH_CHECK_URL }} || exit 1
+        curl --fail ${{ secrets.FRONTEND_HEALTH_CHECK_URL }} || exit 1
+
+    - name: Notify on success
+      if: success()
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            body: '✅ Deployment completed successfully!'
+          })
+
+    - name: Notify on failure
+      if: failure()
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            body: '❌ Deployment failed! Please check the workflow logs.'
+          })
