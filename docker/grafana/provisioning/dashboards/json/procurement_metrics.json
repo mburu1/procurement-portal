@@ -10,6 +10,18 @@
   "liveNow": false,
   "panels": [
     {
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 20,
+      "title": "Procurement Overview",
+      "type": "row",
+      "collapsed": false
+    },
+    {
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -43,9 +55,9 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 8,
         "x": 0,
-        "y": 0
+        "y": 1
       },
       "id": 1,
       "options": {
@@ -72,8 +84,140 @@
           "refId": "A"
         }
       ],
-      "title": "Procurement Process Success Rate",
+      "title": "Process Success Rate",
       "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 1
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(increase(http_request_duration_seconds_count{job=\"backend\",path=~\"/api/tenders/create.*\"}[24h]))",
+          "legendFormat": "New Tenders",
+          "refId": "A"
+        }
+      ],
+      "title": "New Tenders (24h)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 1
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(increase(http_request_duration_seconds_count{job=\"backend\",path=~\"/api/bids/submit.*\"}[24h]))",
+          "legendFormat": "Submitted Bids",
+          "refId": "A"
+        }
+      ],
+      "title": "Submitted Bids (24h)",
+      "type": "stat"
+    },
+    {
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 21,
+      "title": "User Activity",
+      "type": "row",
+      "collapsed": false
     },
     {
       "datasource": {
@@ -92,15 +236,15 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 10,
+            "fillOpacity": 20,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -125,118 +269,17 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "short"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 12,
-        "y": 0
-      },
-      "id": 2,
-      "options": {
-        "legend": {
-          "calcs": ["mean", "max"],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "expr": "rate(http_request_duration_seconds_count{job=\"backend\",path=~\"/api/tenders.*\"}[5m])",
-          "legendFormat": "Tender Requests",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "expr": "rate(http_request_duration_seconds_count{job=\"backend\",path=~\"/api/bids.*\"}[5m])",
-          "legendFormat": "Bid Requests",
-          "refId": "B"
-        }
-      ],
-      "title": "Procurement Activity Rate",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "description": "Average time to complete procurement processes",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "line"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 30
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 24,
         "x": 0,
-        "y": 8
+        "y": 10
       },
-      "id": 3,
+      "id": 8,
       "options": {
         "legend": {
           "calcs": ["mean", "max"],
@@ -255,8 +298,8 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "rate(http_request_duration_seconds_sum{job=\"backend\",path=~\"/api/tenders.*\"}[5m]) / rate(http_request_duration_seconds_count{job=\"backend\",path=~\"/api/tenders.*\"}[5m])",
-          "legendFormat": "Tender Process Time",
+          "expr": "sum(rate(http_request_duration_seconds_count{job=\"backend\",path=~\"/api/auth/login\"}[5m]))",
+          "legendFormat": "Login Rate",
           "refId": "A"
         },
         {
@@ -264,12 +307,12 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "rate(http_request_duration_seconds_sum{job=\"backend\",path=~\"/api/bids.*\"}[5m]) / rate(http_request_duration_seconds_count{job=\"backend\",path=~\"/api/bids.*\"}[5m])",
-          "legendFormat": "Bid Process Time",
+          "expr": "sum(rate(http_request_duration_seconds_count{job=\"backend\",path=~\"/api/users/register\"}[5m]))",
+          "legendFormat": "Registration Rate",
           "refId": "B"
         }
       ],
-      "title": "Process Response Times",
+      "title": "User Authentication Activity",
       "type": "timeseries"
     },
     {
@@ -328,10 +371,10 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 16
+        "x": 12,
+        "y": 10
       },
-      "id": 4,
+      "id": 9,
       "options": {
         "legend": {
           "calcs": ["sum"],
@@ -350,20 +393,31 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "increase(http_request_errors_total{job=\"backend\",path=~\"/api/(tenders|bids|contracts).*\"}[1h])",
-          "legendFormat": "{{path}} - {{status}}",
+          "expr": "sum by(path) (increase(http_request_duration_seconds_count{job=\"backend\",path=~\"/api/(tenders|bids|contracts).*\"}[1h]))",
+          "legendFormat": "{{path}}",
           "refId": "A"
         }
       ],
-      "title": "Procurement Errors (Hourly)",
+      "title": "Procurement Actions by Type (Hourly)",
       "type": "timeseries"
+    },
+    {
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      },
+      "id": 22,
+      "title": "Tender Lifecycle",
+      "type": "row",
+      "collapsed": false
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Document processing performance",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -376,15 +430,15 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 10,
+            "fillOpacity": 20,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -396,7 +450,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "line"
+              "mode": "off"
             }
           },
           "mappings": [],
@@ -406,10 +460,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 5
               }
             ]
           },
@@ -420,10 +470,10 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 12,
-        "y": 16
+        "x": 0,
+        "y": 19
       },
-      "id": 5,
+      "id": 10,
       "options": {
         "legend": {
           "calcs": ["mean", "max"],
@@ -442,13 +492,252 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "rate(document_processing_duration_seconds_sum{job=\"backend\"}[5m]) / rate(document_processing_duration_seconds_count{job=\"backend\"}[5m])",
-          "legendFormat": "{{document_type}}",
+          "expr": "rate(tender_lifecycle_duration_seconds_sum{status=\"awarded\"}[1h]) / rate(tender_lifecycle_duration_seconds_count{status=\"awarded\"}[1h])",
+          "legendFormat": "Time to Award",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "rate(tender_lifecycle_duration_seconds_sum{status=\"first_bid\"}[1h]) / rate(tender_lifecycle_duration_seconds_count{status=\"first_bid\"}[1h])",
+          "legendFormat": "Time to First Bid",
+          "refId": "B"
+        }
+      ],
+      "title": "Tender Lifecycle Durations",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 3
+              },
+              {
+                "color": "green",
+                "value": 5
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 19
+      },
+      "id": 11,
+      "options": {
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "9.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "avg(tender_bids_count) by (category)",
+          "legendFormat": "{{category}}",
           "refId": "A"
         }
       ],
-      "title": "Document Processing Time",
+      "title": "Average Bids per Tender by Category",
+      "type": "bargauge"
+    },
+    {
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 27
+      },
+      "id": 23,
+      "title": "Financial Metrics",
+      "type": "row",
+      "collapsed": false
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 28
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": ["mean", "sum"],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(tender_value_total) by (category)",
+          "legendFormat": "{{category}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Total Tender Value by Category",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 28
+      },
+      "id": 13,
+      "options": {
+        "displayLabels": ["percent"],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": ["value"]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": ["sum"],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "9.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(contract_value_total) by (status)",
+          "legendFormat": "{{status}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Contract Value Distribution by Status",
+      "type": "piechart"
     }
   ],
   "refresh": "10s",
@@ -466,6 +755,6 @@
   "timezone": "",
   "title": "Procurement Business Metrics",
   "uid": "procurement-metrics",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }

@@ -1,0 +1,47 @@
+groups:
+  - name: ProcurementAlerts
+    rules:
+      - alert: LowProcurementSuccessRate
+        expr: '((sum(rate(http_request_duration_seconds_count{job="backend",status=~"2.."}[10m])) / sum(rate(http_request_duration_seconds_count{job="backend"}[10m]))) * 100) < 90'
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: Low procurement process success rate
+          description: "Procurement API successful response rate below 90% over the last 10m (current: {{ $value }}%)"
+
+      - alert: HighTenderTimeToAward
+        expr: 'rate(tender_lifecycle_duration_seconds_sum{status="awarded"}[24h]) / rate(tender_lifecycle_duration_seconds_count{status="awarded"}[24h]) > 604800'
+        for: 24h
+        labels:
+          severity: warning
+        annotations:
+          summary: Long time to award tenders
+          description: "Average time to award tenders is greater than 7 days ({{ $value }}s)"
+
+      - alert: HighProcurementErrorRate
+        expr: 'sum(rate(http_request_errors_total{job="backend",path=~"/api/(tenders|bids|contracts).*"}[5m])) / sum(rate(http_request_duration_seconds_count{job="backend"}[5m])) > 0.05'
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: High procurement subsystem error rate
+          description: "Error rate for procurement endpoints exceeded 5% ({{ $value }})"
+
+      - alert: LowNewTenders24h
+        expr: 'sum(increase(http_request_duration_seconds_count{job="backend",path=~"/api/tenders/create.*"}[24h])) < 1'
+        for: 24h
+        labels:
+          severity: info
+        annotations:
+          summary: Low new tender activity
+          description: "Fewer than 1 new tender created in the last 24 hours"
+
+      - alert: LargeContractCreated
+        expr: 'increase(contract_value_total[1h]) > 1000000'
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Large contract value created
+          description: "Contracts totaling more than $1,000,000 were created in the last hour ({{ $value }})"
