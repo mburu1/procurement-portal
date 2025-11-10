@@ -1,0 +1,380 @@
+🏗️ Complete Project Architecture
+Tech Stack Recommendation:
+Frontend:
+
+React.js (already done)
+Tailwind CSS (already done)
+React Router (for navigation)
+Axios (for API calls)
+React Hook Form (for forms)
+JWT handling for authentication
+
+Backend:
+
+Node.js + Express.js 
+
+
+Database:
+
+PostgreSQL (for production)
+
+
+File Storage:
+use both
+Cloudinary (for tender documents/PDFs)
+Local storage for development
+
+Authentication:
+
+JWT (JSON Web Tokens)
+bcrypt for password hashing
+Email verification
+
+Additional Tools:
+
+Git & GitHub (version control)
+Docker (containerization)
+Postman (API testing)
+
+procurement-portal/
+│
+├── frontend/
+│   ├── public/
+│   │   ├── index.html
+│   │   ├── favicon.ico
+│   │   ├── manifest.json
+│   │   └── robots.txt
+│   │
+│   ├── src/
+│   │   ├── assets/
+│   │   │   ├── images/
+│   │   │   │   ├── logo.png
+│   │   │   │   └── kenya-flag.png
+│   │   │   └── icons/
+│   │   │
+│   │   ├── components/
+│   │   │   ├── common/
+│   │   │   │   ├── Header.jsx
+│   │   │   │   ├── Footer.jsx
+│   │   │   │   ├── Navbar.jsx
+│   │   │   │   ├── Sidebar.jsx
+│   │   │   │   ├── Loader.jsx
+│   │   │   │   ├── ErrorBoundary.jsx
+│   │   │   │   └── ProtectedRoute.jsx
+│   │   │   │
+│   │   │   ├── tender/
+│   │   │   │   ├── TenderCard.jsx
+│   │   │   │   ├── TenderList.jsx
+│   │   │   │   ├── TenderDetail.jsx
+│   │   │   │   ├── TenderFilters.jsx
+│   │   │   │   ├── TenderForm.jsx
+│   │   │   │   └── TenderStatus.jsx
+│   │   │   │
+│   │   │   ├── bid/
+│   │   │   │   ├── BidForm.jsx
+│   │   │   │   ├── BidList.jsx
+│   │   │   │   ├── BidDetail.jsx
+│   │   │   │   └── BidStatus.jsx
+│   │   │   │
+│   │   │   ├── auth/
+│   │   │   │   ├── LoginForm.jsx
+│   │   │   │   ├── RegisterForm.jsx
+│   │   │   │   ├── ForgotPasswordForm.jsx
+│   │   │   │   ├── ResetPasswordForm.jsx
+│   │   │   │   └── EmailVerification.jsx
+│   │   │   │
+│   │   │   ├── dashboard/
+│   │   │   │   ├── StatsCard.jsx
+│   │   │   │   ├── RecentTenders.jsx
+│   │   │   │   ├── ActivityLog.jsx
+│   │   │   │   └── Charts.jsx
+│   │   │   │
+│   │   │   ├── file/
+│   │   │   │   ├── FileUpload.jsx
+│   │   │   │   ├── FileList.jsx
+│   │   │   │   └── DocumentViewer.jsx
+│   │   │   │
+│   │   │   └── ui/
+│   │   │       ├── Button.jsx
+│   │   │       ├── Input.jsx
+│   │   │       ├── Select.jsx
+│   │   │       ├── Modal.jsx
+│   │   │       ├── Alert.jsx
+│   │   │       ├── Badge.jsx
+│   │   │       ├── Card.jsx
+│   │   │       ├── Table.jsx
+│   │   │       └── Pagination.jsx
+│   │   │
+│   │   ├── pages/
+│   │   │   ├── public/
+│   │   │   │   ├── Home.jsx
+│   │   │   │   ├── About.jsx
+│   │   │   │   ├── Contact.jsx
+│   │   │   │   ├── FAQ.jsx
+│   │   │   │   └── HelpDesk.jsx
+│   │   │   │
+│   │   │   ├── auth/
+│   │   │   │   ├── Login.jsx
+│   │   │   │   ├── Register.jsx
+│   │   │   │   ├── ForgotPassword.jsx
+│   │   │   │   ├── ResetPassword.jsx
+│   │   │   │   └── VerifyEmail.jsx
+│   │   │   │
+│   │   │   ├── tenders/
+│   │   │   │   ├── TendersList.jsx
+│   │   │   │   ├── TenderDetails.jsx
+│   │   │   │   ├── CreateTender.jsx
+│   │   │   │   ├── EditTender.jsx
+│   │   │   │   └── MyTenders.jsx
+│   │   │   │
+│   │   │   ├── bids/
+│   │   │   │   ├── SubmitBid.jsx
+│   │   │   │   ├── MyBids.jsx
+│   │   │   │   ├── BidDetails.jsx
+│   │   │   │   └── ManageBids.jsx
+│   │   │   │
+│   │   │   ├── dashboard/
+│   │   │   │   ├── SupplierDashboard.jsx
+│   │   │   │   ├── EntityDashboard.jsx
+│   │   │   │   └── AdminDashboard.jsx
+│   │   │   │
+│   │   │   ├── profile/
+│   │   │   │   ├── Profile.jsx
+│   │   │   │   ├── EditProfile.jsx
+│   │   │   │   ├── ChangePassword.jsx
+│   │   │   │   └── Settings.jsx
+│   │   │   │
+│   │   │   ├── contracts/
+│   │   │   │   ├── ContractsList.jsx
+│   │   │   │   └── ContractDetails.jsx
+│   │   │   │
+│   │   │   ├── entities/
+│   │   │   │   ├── EntitiesList.jsx
+│   │   │   │   └── EntityDetails.jsx
+│   │   │   │
+│   │   │   ├── suppliers/
+│   │   │   │   ├── SuppliersList.jsx
+│   │   │   │   └── SupplierDetails.jsx
+│   │   │   │
+│   │   │   ├── reports/
+│   │   │   │   ├── TenderReports.jsx
+│   │   │   │   ├── BidReports.jsx
+│   │   │   │   └── Analytics.jsx
+│   │   │   │
+│   │   │   └── error/
+│   │   │       ├── NotFound.jsx
+│   │   │       ├── Unauthorized.jsx
+│   │   │       └── ServerError.jsx
+│   │   │
+│   │   ├── context/
+│   │   │   ├── AuthContext.jsx
+│   │   │   ├── TenderContext.jsx
+│   │   │   ├── NotificationContext.jsx
+│   │   │   └── ThemeContext.jsx
+│   │   │
+│   │   ├── hooks/
+│   │   │   ├── useAuth.js
+│   │   │   ├── useTenders.js
+│   │   │   ├── useBids.js
+│   │   │   ├── useFileUpload.js
+│   │   │   ├── useDebounce.js
+│   │   │   └── usePagination.js
+│   │   │
+│   │   ├── services/
+│   │   │   ├── api.js
+│   │   │   ├── authService.js
+│   │   │   ├── tenderService.js
+│   │   │   ├── bidService.js
+│   │   │   ├── userService.js
+│   │   │   ├── fileService.js
+│   │   │   └── notificationService.js
+│   │   │
+│   │   ├── utils/
+│   │   │   ├── constants.js
+│   │   │   ├── helpers.js
+│   │   │   ├── validators.js
+│   │   │   ├── formatters.js
+│   │   │   ├── localStorage.js
+│   │   │   └── axiosConfig.js
+│   │   │
+│   │   ├── styles/
+│   │   │   ├── index.css
+│   │   │   └── tailwind.css
+│   │   │
+│   │   ├── routes/
+│   │   │   ├── AppRoutes.jsx
+│   │   │   ├── PublicRoutes.jsx
+│   │   │   └── PrivateRoutes.jsx
+│   │   │
+│   │   ├── App.jsx
+│   │   └── index.jsx
+│   │
+│   ├── .env.example
+│   ├── .env.development
+│   ├── .env.production
+│   ├── .gitignore
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   └── README.md
+│
+├── backend/
+│   ├── src/
+│   │   ├── config/
+│   │   │   ├── database.js
+│   │   │   ├── cloudinary.js
+│   │   │   ├── email.js
+│   │   │   ├── jwt.js
+│   │   │   └── multer.js
+│   │   │
+│   │   ├── controllers/
+│   │   │   ├── authController.js
+│   │   │   ├── userController.js
+│   │   │   ├── tenderController.js
+│   │   │   ├── bidController.js
+│   │   │   ├── fileController.js
+│   │   │   ├── entityController.js
+│   │   │   ├── contractController.js
+│   │   │   ├── notificationController.js
+│   │   │   └── reportController.js
+│   │   │
+│   │   ├── models/
+│   │   │   ├── User.js
+│   │   │   ├── Tender.js
+│   │   │   ├── Bid.js
+│   │   │   ├── Document.js
+│   │   │   ├── Entity.js
+│   │   │   ├── Contract.js
+│   │   │   ├── Category.js
+│   │   │   ├── Notification.js
+│   │   │   └── ActivityLog.js
+│   │   │
+│   │   ├── routes/
+│   │   │   ├── index.js
+│   │   │   ├── authRoutes.js
+│   │   │   ├── userRoutes.js
+│   │   │   ├── tenderRoutes.js
+│   │   │   ├── bidRoutes.js
+│   │   │   ├── fileRoutes.js
+│   │   │   ├── entityRoutes.js
+│   │   │   ├── contractRoutes.js
+│   │   │   ├── notificationRoutes.js
+│   │   │   └── reportRoutes.js
+│   │   │
+│   │   ├── middleware/
+│   │   │   ├── auth.js
+│   │   │   ├── roleCheck.js
+│   │   │   ├── validation.js
+│   │   │   ├── errorHandler.js
+│   │   │   ├── upload.js
+│   │   │   ├── rateLimiter.js
+│   │   │   └── logger.js
+│   │   │
+│   │   ├── validators/
+│   │   │   ├── authValidator.js
+│   │   │   ├── tenderValidator.js
+│   │   │   ├── bidValidator.js
+│   │   │   └── userValidator.js
+│   │   │
+│   │   ├── utils/
+│   │   │   ├── email.js
+│   │   │   ├── tokenGenerator.js
+│   │   │   ├── fileUpload.js
+│   │   │   ├── pdfGenerator.js
+│   │   │   ├── dateHelper.js
+│   │   │   └── logger.js
+│   │   │
+│   │   ├── services/
+│   │   │   ├── emailService.js
+│   │   │   ├── fileService.js
+│   │   │   ├── notificationService.js
+│   │   │   └── reportService.js
+│   │   │
+│   │   └── server.js
+│   │
+│   ├── tests/
+│   │   ├── unit/
+│   │   │   ├── auth.test.js
+│   │   │   ├── tender.test.js
+│   │   │   └── bid.test.js
+│   │   │
+│   │   └── integration/
+│   │       ├── auth.test.js
+│   │       ├── tender.test.js
+│   │       └── bid.test.js
+│   │
+│   ├── uploads/
+│   │   ├── documents/
+│   │   ├── images/
+│   │   └── temp/
+│   │
+│   ├── .env.example
+│   ├── .env.development
+│   ├── .env.production
+│   ├── .gitignore
+│   ├── package.json
+│   ├── package-lock.json
+│   └── README.md
+│
+├── database/
+│   ├── migrations/
+│   │   ├── 001_create_users_table.sql
+│   │   ├── 002_create_entities_table.sql
+│   │   ├── 003_create_categories_table.sql
+│   │   ├── 004_create_tenders_table.sql
+│   │   ├── 005_create_documents_table.sql
+│   │   ├── 006_create_bids_table.sql
+│   │   ├── 007_create_contracts_table.sql
+│   │   ├── 008_create_notifications_table.sql
+│   │   └── 009_create_activity_logs_table.sql
+│   │
+│   ├── seeds/
+│   │   ├── 001_seed_categories.sql
+│   │   ├── 002_seed_entities.sql
+│   │   ├── 003_seed_users.sql
+│   │   └── 004_seed_tenders.sql
+│   │
+│   ├── schema.sql
+│   └── README.md
+│
+├── docker/
+│   ├── frontend/
+│   │   └── Dockerfile
+│   │
+│   ├── backend/
+│   │   └── Dockerfile
+│   │
+│   └── postgres/
+│       └── Dockerfile
+│
+├── docs/
+│   ├── API_DOCUMENTATION.md
+│   ├── DATABASE_SCHEMA.md
+│   ├── DEPLOYMENT.md
+│   ├── USER_GUIDE.md
+│   └── DEVELOPER_GUIDE.md
+│
+├── postman/
+│   ├── procurement-portal.postman_collection.json
+│   └── procurement-portal.postman_environment.json
+│
+├── scripts/
+│   ├── setup.sh
+│   ├── seed-database.sh
+│   ├── backup-database.sh
+│   └── deploy.sh
+│
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       └── cd.yml
+│
+├── .gitignore
+├── .dockerignore
+├── docker-compose.yml
+├── docker-compose.dev.yml
+├── docker-compose.prod.yml
+├── README.md
+├── LICENSE
+└── CONTRIBUTING.md
